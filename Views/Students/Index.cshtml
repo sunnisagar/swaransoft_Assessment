@@ -1,0 +1,64 @@
+﻿@model IEnumerable<swaransoft_Assessment.Models.Student>
+
+@{
+    ViewBag.Title = "Student Registration";
+}
+
+<h2>Student List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(x => x.StudentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(x => x.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(x => x.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(x => x.Mobile)
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+    @foreach (var stu in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(x => stu.StudentId)
+            </td>
+            <td>
+                @if (stu.PhotoData != null && stu.PhotoData.Length > 0)
+                {
+                    string imageBase64 = Convert.ToBase64String(stu.PhotoData);
+                    string imageSrc = $"data:image/jpeg;base64,{imageBase64}";
+
+                    <img src="@imageSrc" alt="Student Photo" width="48px" height="48px" />
+                }
+                else
+                {
+                    <p>No photo</p>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(x => stu.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(x => stu.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(x => stu.Mobile)
+            </td>
+            <td>
+                <a href="/Students/create?id=@stu.StudentId&stateId=@stu.StateId&cityId=@stu.CityId">Edit</a> | @Html.ActionLink("Delete", "Delete", new { id = stu.StudentId })
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,146 @@
+﻿@model swaransoft_Assessment.Models.Student
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Registration Form</h2>
+
+@using (Html.BeginForm("Create", "Students", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+        <h4><i>Students detail</i></h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                @Html.HiddenFor(model => model.StudentId)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Name, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Email, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Mobile, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.Mobile, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Mobile, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label col-md-2">
+                        <label>State</label>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.StateId, Model.CascadingModel.States, "Please select", new { @class = "form-control", onchange = "stateChanged(this.value);" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label col-md-2">
+                        <label>City</label>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.CityId, Model.CascadingModel.Cities, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="control-label col-md-2">
+                        <label>About Your self</label>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(x => x.AboutYourSelf, new { @class = "form-control", @rows = "10" })
+                        @Html.ValidationMessageFor(x => x.AboutYourSelf, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <label>Upload Photo</label>
+                <div style="border:1px solid #ccc; padding:10px;">
+                    @if (Model.PhotoData != null && Model.PhotoData.Length > 0)
+                    {
+                        string imageBase64 = Convert.ToBase64String(Model.PhotoData);
+                        string imageSrc = $"data:image/jpeg;base64,{imageBase64}";
+
+                        <img id="previewImage" src="@imageSrc" alt="Student Photo" width="100%" />
+                    }
+                    else
+                    {
+                        <img id="previewImage" src="~/Content/BlankPhoto.jpg" alt="Student Photo" width="100%" style="" />
+                    }
+                </div>
+                <br />
+                <input type="file" name="PhotoFile" id="photoInput" required />
+               
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+
+    function stateChanged(selectedValue) {
+
+        var name = $('#Name').val(); // Get the value of the Name field
+        var email = $('#Email').val(); // Get the value of the Email field
+        var mobile = $('#Mobile').val(); // Get the value of the Mobile fiel
+
+        window.location.href = '/Students/Create?stateId=' + selectedValue + '&name=' + name + '&email=' + email + '&mobile=' + mobile;
+    }
+
+    $(document).ready(function () {
+        $('#photoInput').change(function () {
+            var input = this;
+            var file = input.files[0];
+
+            // Check file type
+            var fileType = file.type;
+            if (!fileType.match('image/jpeg') && !fileType.match('image/png')) {
+                alert('Please select a valid image file (JPG or PNG).');
+                $('#photoInput').val('');
+                $('#previewImage').hide();
+                return;
+            }
+
+            // Check file size (in bytes)
+            var fileSize = file.size;
+            var maxSizeInBytes = 250 * 1024; // 250 KB
+            if (fileSize > maxSizeInBytes) {
+                alert('File size exceeds 250 KB.');
+                $('#photoInput').val('');
+                $('#previewImage').hide();
+                return;
+            }
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#previewImage').attr('src', e.target.result);
+                    $('#previewImage').show();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        });
+    });
+</script>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
