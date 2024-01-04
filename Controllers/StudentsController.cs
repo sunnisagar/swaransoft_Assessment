@@ -21,7 +21,10 @@ namespace swaransoft_Assessment.Controllers
                 var states = new List<State>
             {
                 new State { StateName = "Uttar Pradesh" },
-                new State { StateName = "Rajasthan" }
+                new State { StateName = "Rajasthan" },
+                new State { StateName = "Haryana" },
+                new State { StateName = "Maharashtra" },
+                new State { StateName = "Punjab" }
             };
 
                 _context.States.AddRange(states);
@@ -32,13 +35,22 @@ namespace swaransoft_Assessment.Controllers
             {
                 var uttarPradeshId = _context.States.First(s => s.StateName == "Uttar Pradesh").StateId;
                 var rajasthanId = _context.States.First(s => s.StateName == "Rajasthan").StateId;
+                var haryana = _context.States.First(s => s.StateName == "Haryana").StateId;
+                var maharashtra = _context.States.First(s => s.StateName == "Maharashtra").StateId;
+                var punjab = _context.States.First(s => s.StateName == "Punjab").StateId;
 
                 var cities = new List<City>
             {
                 new City { StateId = uttarPradeshId, CityName = "Agra" },
                 new City { StateId = uttarPradeshId, CityName = "Noida" },
                 new City { StateId = rajasthanId, CityName = "Jaipur" },
-                new City { StateId = rajasthanId, CityName = "Udaipur" }
+                new City { StateId = rajasthanId, CityName = "Udaipur" },
+                new City { StateId = haryana, CityName = "Gurugram" },
+                new City { StateId = haryana, CityName = "Faridabad" },
+                new City { StateId = maharashtra, CityName = "Mumbai" },
+                new City { StateId = maharashtra, CityName = "Nagpur" },
+                new City { StateId = punjab, CityName = "Amritsar" },
+                new City { StateId = punjab, CityName = "Jalandhar" }
             };
 
                 _context.Cities.AddRange(cities);
